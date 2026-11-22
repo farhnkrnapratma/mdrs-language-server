@@ -4,6 +4,9 @@
 
 version: 2.1
 
+orbs:
+    codecov: codecov/codecov@6.1.0
+
 executors:
     node:
         docker:
@@ -39,11 +42,22 @@ jobs:
         steps:
             - install
             - run: bun run typecheck
-            - run: bun test
+            - run:
+                  name: Run tests with a 100% line and function coverage gate
+                  command: bun run coverage
+            - store_artifacts:
+                  path: coverage
+            - codecov/upload:
+                  files: coverage/lcov.info
             - run: bun run build
             - run:
                   name: Run the stdio test against the Node build
                   command: MDRS_LS_NODE=1 bun test test/server.test.ts
+    lint:
+        executor: node
+        steps:
+            - install
+            - run: bunx biome ci .
     commitlint:
         executor: node
         steps:
@@ -60,5 +74,6 @@ jobs:
 workflows:
     ci:
         jobs:
+            - lint
             - test
             - commitlint
