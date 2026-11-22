@@ -1,5 +1,7 @@
 # MDRS Language Server
 
+[![npm](https://img.shields.io/npm/v/@mdrs/language-server?label=npm)](https://www.npmjs.com/package/@mdrs/language-server) ![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)
+
 A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) server for **MDRS (Markdown Rich Syntax)**, the Markdown dialect with directives, document variables, conditionals and live data. It works in any editor with an LSP client.
 
 ## Features
