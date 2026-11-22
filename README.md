@@ -114,6 +114,10 @@ bun run build      # compiles to dist/
 
 The expression lexer and parser in `src/expr/` come from the MDRS engine, so `:::define` and `${…}` errors read the same as the engine's own messages.
 
+## Versioning
+
+Releases follow [Semantic Versioning 2.0.0](https://semver.org/). Before 1.0.0, a minor release (0.x.0) may change diagnostics, completion or the library API, and a patch release (0.x.y) only fixes bugs. Each release is tagged `vMAJOR.MINOR.PATCH` and listed in [CHANGELOG.md](CHANGELOG.md).
+
 ## License
 
 Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE) or [MIT license](LICENSE-MIT) at your option.
