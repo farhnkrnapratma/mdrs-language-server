@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "lib": ["es2023"],
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "types": ["node", "bun"],
+        "allowImportingTsExtensions": false,
+        "rootDir": "."
+    },
+    "include": ["src", "test"]
+}
