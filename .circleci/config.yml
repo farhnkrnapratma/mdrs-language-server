@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2026 Farhan Kurnia Pratama
+#
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+version: 2.1
+
+executors:
+    node:
+        docker:
+            - image: cimg/node:24.22
+        resource_class: medium
+
+commands:
+    setup-bun:
+        steps:
+            - run:
+                  name: Install bun
+                  command: |
+                      curl -fsSL https://bun.sh/install | bash -s "bun-v1.4.5"
+                      ln -sf "$HOME/.bun/bin/bun" "$HOME/.bun/bin/bunx"
+                      echo 'export PATH="$HOME/.bun/bin:$PATH"' >> "$BASH_ENV"
+    install:
+        steps:
+            - checkout
+            - setup-bun
+            - restore_cache:
+                  keys:
+                      - bun-v1-{{ checksum "bun.lock" }}
+                      - bun-v1-
+            - run: bun install --frozen-lockfile
+            - save_cache:
+                  key: bun-v1-{{ checksum "bun.lock" }}
+                  paths:
+                      - ~/.bun/install/cache
+
+jobs:
+    test:
+        executor: node
+        steps:
+            - install
+            - run: bun run typecheck
+            - run: bun test
+            - run: bun run build
+            - run:
+                  name: Run the stdio test against the Node build
+                  command: MDRS_LS_NODE=1 bun test test/server.test.ts
+    commitlint:
+        executor: node
+        steps:
+            - install
+            - run:
+                  name: Lint commit messages
+                  command: |
+                      if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+                          bunx commitlint --from "$(git merge-base origin/main HEAD)" --to HEAD
+                      else
+                          bunx commitlint --from HEAD~1 --to HEAD
+                      fi
+
+workflows:
+    ci:
+        jobs:
+            - test
+            - commitlint
