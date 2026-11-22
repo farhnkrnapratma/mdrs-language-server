@@ -2,16 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-import type {
-    ArrayLit,
-    Assignment,
-    Expr,
-    GetCall,
-    ObjectLit,
-    PathSegment,
-    Reference,
-    TemplateLit
-} from './ast.js';
+import type { ArrayLit, Assignment, Expr, GetCall, ObjectLit, PathSegment, Reference, TemplateLit } from './ast.js';
 import { DefineError } from './errors.js';
 import { type Token, type TokenType, tokenize } from './lexer.js';
 
@@ -72,9 +63,7 @@ export class Parser {
         const expr = this.parseExpression();
         if (!this.check('EOF')) {
             const tok = this.peek();
-            throw new DefineError(
-                `Unexpected token '${tok.value || tok.type}' at position ${tok.pos}`
-            );
+            throw new DefineError(`Unexpected token '${tok.value || tok.type}' at position ${tok.pos}`);
         }
         return expr;
     }
@@ -187,16 +176,14 @@ export class Parser {
             this.expect('RPAREN', "Expected ')'");
             return expr;
         }
-        if (tok.type === 'IDENT' && this.tokens[this.pos + 1]?.type === 'LPAREN')
-            return this.parseCall();
+        if (tok.type === 'IDENT' && this.tokens[this.pos + 1]?.type === 'LPAREN') return this.parseCall();
         if (tok.type === 'IDENT') return this.parseReferenceChain();
         throw new DefineError(`Unexpected token '${tok.value || tok.type}' at position ${tok.pos}`);
     }
 
     private parseCall(): GetCall {
         const nameTok = this.advance();
-        if (nameTok.value !== 'get')
-            throw new DefineError(`Unknown function '${nameTok.value}' (supported: get)`);
+        if (nameTok.value !== 'get') throw new DefineError(`Unknown function '${nameTok.value}' (supported: get)`);
         this.advance();
         const url = this.parseExpression();
         this.expect('COMMA', "Expected ',' between the get() arguments");
@@ -264,9 +251,7 @@ export class Parser {
                     this.advance();
                     path.push({ kind: 'index', value: idxTok.value });
                 } else {
-                    throw new DefineError(
-                        `Expected a number or string inside [...] at position ${idxTok.pos}`
-                    );
+                    throw new DefineError(`Expected a number or string inside [...] at position ${idxTok.pos}`);
                 }
                 this.expect('RBRACKET', "Expected ']'");
             } else {

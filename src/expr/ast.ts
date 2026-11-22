@@ -45,10 +45,7 @@ export interface UnaryExpr {
     operand: Expr;
 }
 
-export type TemplatePart =
-    | { kind: 'text'; value: string }
-    | { kind: 'variable'; name: string }
-    | { kind: 'expression'; expr: Expr };
+export type TemplatePart = { kind: 'text'; value: string } | { kind: 'variable'; name: string } | { kind: 'expression'; expr: Expr };
 
 export interface TemplateLit {
     kind: 'template';

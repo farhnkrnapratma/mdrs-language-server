@@ -4,7 +4,7 @@
 
 import { load as loadYaml, YAMLException } from 'js-yaml';
 import { type Diagnostic, DiagnosticSeverity, type Range } from 'vscode-languageserver';
-import { directiveSpec, type DirectiveSpec } from './directives.js';
+import { type DirectiveSpec, directiveSpec } from './directives.js';
 import type { Expr } from './expr/ast.js';
 import { DefineError } from './expr/errors.js';
 import { isValidIdentifierName } from './expr/identifiers.js';
@@ -75,7 +75,7 @@ export interface Analysis {
     diagnostics: Diagnostic[];
 }
 
-const PREFIX = String.raw`^( {0,3}(?:> ?)*)`;
+const PREFIX = '^( {0,3}(?:> ?)*)';
 const OPEN_RE = new RegExp(`${PREFIX}(:{3,})([A-Za-z][A-Za-z-]*)(.*)$`);
 const TAB_RE = new RegExp(`${PREFIX}::([A-Za-z][A-Za-z-]*)(.*)$`);
 const CLOSE_RE = new RegExp(`${PREFIX}(:{2,})[ \\t]*$`);
@@ -126,8 +126,7 @@ export function analyze(text: string): Analysis {
     while (firstContent < lines.length && lines[firstContent].trim() === '') firstContent++;
 
     const defineLine = lines[firstContent] !== undefined ? OPEN_RE.exec(lines[firstContent]) : null;
-    const hasDefine =
-        defineLine !== null && defineLine[3].toLowerCase() === 'define' && defineLine[1] === '';
+    const hasDefine = defineLine !== null && defineLine[3].toLowerCase() === 'define' && defineLine[1] === '';
     const scope: Scope = { inDefine: false, defined: new Set(), hasDefine };
 
     const stack: DirectiveNode[] = [];
@@ -149,12 +148,7 @@ export function analyze(text: string): Analysis {
 
         if (fence) {
             const close = FENCE_RE.exec(source);
-            if (
-                close &&
-                close[2][0] === fence.char &&
-                close[2].length >= fence.length &&
-                close[3].trim() === ''
-            ) {
+            if (close && close[2][0] === fence.char && close[2].length >= fence.length && close[3].trim() === '') {
                 result.fences.push({ start: fence.start, end: line });
                 fence = undefined;
             }
@@ -246,11 +240,7 @@ export function analyze(text: string): Analysis {
             };
 
             if (!spec) {
-                report(
-                    nameRange,
-                    `Unknown directive ':::${rawName}'. It renders as plain text.`,
-                    DiagnosticSeverity.Warning
-                );
+                report(nameRange, `Unknown directive ':::${rawName}'. It renders as plain text.`, DiagnosticSeverity.Warning);
             } else {
                 checkAttributes(node, report);
                 if (spec.kind === 'tab') {
@@ -297,7 +287,7 @@ export function analyze(text: string): Analysis {
                 attributes,
                 children: []
             };
-            if (!parent || parent.spec?.kind !== 'tabGroup') {
+            if (parent?.spec?.kind !== 'tabGroup') {
                 report(nameRange, '::tab must sit directly inside :::tabs or :::snippets.', DiagnosticSeverity.Error);
                 continue;
             }
@@ -353,16 +343,32 @@ export function analyze(text: string): Analysis {
     }
 
     if (result.define && result.define.closeLine === undefined) {
-        report(range(result.define.openLine, 0, lines[result.define.openLine].length), ':::define is never closed with `:::`.', DiagnosticSeverity.Error);
+        report(
+            range(result.define.openLine, 0, lines[result.define.openLine].length),
+            ':::define is never closed with `:::`.',
+            DiagnosticSeverity.Error
+        );
     }
     if (verbatim) {
-        report(range(verbatim.line, 0, lines[verbatim.line].length), `:::verbatim is never closed with ${':'.repeat(verbatim.colons)}.`, DiagnosticSeverity.Error);
+        report(
+            range(verbatim.line, 0, lines[verbatim.line].length),
+            `:::verbatim is never closed with ${':'.repeat(verbatim.colons)}.`,
+            DiagnosticSeverity.Error
+        );
     }
     for (const node of stack) {
-        report(node.nameRange, `:::${node.name} is never closed${node.spec?.kind === 'tab' ? ' with `::`' : ' with `:::`'}. It renders as plain text from here on.`, DiagnosticSeverity.Error);
+        report(
+            node.nameRange,
+            `:::${node.name} is never closed${node.spec?.kind === 'tab' ? ' with `::`' : ' with `:::`'}. It renders as plain text from here on.`,
+            DiagnosticSeverity.Error
+        );
     }
     for (const open of conditionalStack) {
-        report(range(open.block.lines[0], 0, lines[open.block.lines[0]].length), `':::if ${open.text}' is never closed with :::endif`, DiagnosticSeverity.Error);
+        report(
+            range(open.block.lines[0], 0, lines[open.block.lines[0]].length),
+            `':::if ${open.text}' is never closed with :::endif`,
+            DiagnosticSeverity.Error
+        );
     }
     for (const open of inlineStack) {
         report(open.range, `'\${if ${open.text}}' is never closed with \${endif}`, DiagnosticSeverity.Error);
@@ -442,7 +448,11 @@ function checkAttributes(node: DirectiveNode, report: Reporter) {
 function checkEmbed(node: DirectiveNode, report: Reporter) {
     const url = node.attributes.find(attribute => attribute.name === 'url');
     if (url && !/^https?:\/\//i.test(url.value)) {
-        report(url.valueRange, 'The embed URL must start with http:// or https://; otherwise it renders as plain text.', DiagnosticSeverity.Warning);
+        report(
+            url.valueRange,
+            'The embed URL must start with http:// or https://; otherwise it renders as plain text.',
+            DiagnosticSeverity.Warning
+        );
     }
 }
 
@@ -489,15 +499,7 @@ function handleConditional(
     stack.pop();
 }
 
-function checkCondition(
-    rest: string,
-    line: number,
-    offset: number,
-    nameRange: Range,
-    scope: Scope,
-    result: Analysis,
-    report: Reporter
-) {
+function checkCondition(rest: string, line: number, offset: number, nameRange: Range, scope: Scope, result: Analysis, report: Reporter) {
     if (rest.trim() === '') {
         report(nameRange, 'Expected a condition after the keyword.', DiagnosticSeverity.Error);
         return;
@@ -676,7 +678,11 @@ function scanInterpolations(
         const whole = range(line, index, end + 1);
         const inner = source.slice(index + 2, end);
         if (!scope.hasDefine) {
-            report(whole, 'Interpolation only works in a document that starts with a :::define block; this renders as written.', DiagnosticSeverity.Hint);
+            report(
+                whole,
+                'Interpolation only works in a document that starts with a :::define block; this renders as written.',
+                DiagnosticSeverity.Hint
+            );
         } else {
             checkInterpolation(inner, line, index + 2, whole, scope, result, inlineStack, report);
         }
@@ -808,7 +814,11 @@ function checkDefineBlock(result: Analysis, scope: Scope, report: Reporter) {
             valueRange: span(valueFrom, valueEnd)
         };
         if (!isValidIdentifierName(keyToken.value)) {
-            report(keyRange, `'${keyToken.value}' is not a valid variable name (check reserved words / naming rules)`, DiagnosticSeverity.Error);
+            report(
+                keyRange,
+                `'${keyToken.value}' is not a valid variable name (check reserved words / naming rules)`,
+                DiagnosticSeverity.Error
+            );
         } else if (defineScope.defined.has(keyToken.value)) {
             report(keyRange, `'${keyToken.value}' is already defined`, DiagnosticSeverity.Error);
         }

@@ -1,0 +1,24 @@
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true, "defaultBranch": "main" },
+    "files": { "ignoreUnknown": true, "includes": ["**", "!**/*.md"] },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineEnding": "lf",
+        "lineWidth": 140
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "none",
+            "arrowParentheses": "asNeeded"
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "rules": { "preset": "recommended", "suspicious": { "noTemplateCurlyInString": "off" } }
+    },
+    "assist": { "actions": { "source": { "organizeImports": "on" } } }
+}

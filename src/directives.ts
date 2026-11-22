@@ -8,16 +8,7 @@ export interface AttributeSpec {
     description: string;
 }
 
-export type DirectiveKind =
-    | 'container'
-    | 'tabGroup'
-    | 'tab'
-    | 'embed'
-    | 'math'
-    | 'references'
-    | 'define'
-    | 'conditional'
-    | 'verbatim';
+export type DirectiveKind = 'container' | 'tabGroup' | 'tab' | 'embed' | 'math' | 'references' | 'define' | 'conditional' | 'verbatim';
 
 export interface DirectiveSpec {
     name: string;
@@ -58,10 +49,7 @@ export const DIRECTIVES: DirectiveSpec[] = [
         name: 'callout',
         kind: 'container',
         summary: 'A callout with your own title and icon.',
-        attributes: [
-            { name: 'title', required: true, description: 'The callout heading.' },
-            ICON
-        ],
+        attributes: [{ name: 'title', required: true, description: 'The callout heading.' }, ICON],
         snippet: 'callout title="${1:Title}"\n$0\n:::',
         docs: `${DOCS}/003-callouts.md`
     },
@@ -69,9 +57,7 @@ export const DIRECTIVES: DirectiveSpec[] = [
         name: 'details',
         kind: 'container',
         summary: 'A collapsible section. The summary is the clickable title.',
-        attributes: [
-            { name: 'summary', required: true, description: 'The clickable title of the section.' }
-        ],
+        attributes: [{ name: 'summary', required: true, description: 'The clickable title of the section.' }],
         snippet: 'details summary="${1:Summary}"\n$0\n:::',
         docs: `${DOCS}/004-details.md`
     },
@@ -86,8 +72,7 @@ export const DIRECTIVES: DirectiveSpec[] = [
     {
         name: 'snippets',
         kind: 'tabGroup',
-        summary:
-            'A tab group for code samples. Groups that share a `key` switch together when a reader picks a tab.',
+        summary: 'A tab group for code samples. Groups that share a `key` switch together when a reader picks a tab.',
         attributes: [
             {
                 name: 'key',
@@ -109,8 +94,7 @@ export const DIRECTIVES: DirectiveSpec[] = [
     {
         name: 'steps',
         kind: 'container',
-        summary:
-            'A numbered timeline. Write a list, or use `##`–`####` headings when a step needs several paragraphs.',
+        summary: 'A numbered timeline. Write a list, or use `##`–`####` headings when a step needs several paragraphs.',
         attributes: [],
         snippet: 'steps\n1. $0\n:::',
         docs: `${DOCS}/006-steps.md`
@@ -153,8 +137,7 @@ export const DIRECTIVES: DirectiveSpec[] = [
     {
         name: 'if',
         kind: 'conditional',
-        summary:
-            'Renders the following lines when the condition is `true`. Continue with `:::elif`, `:::else`, and close with `:::endif`.',
+        summary: 'Renders the following lines when the condition is `true`. Continue with `:::elif`, `:::else`, and close with `:::endif`.',
         attributes: [],
         snippet: 'if ${1:condition}\n$0\n:::endif',
         docs: `${DOCS}/016-conditionals.md`

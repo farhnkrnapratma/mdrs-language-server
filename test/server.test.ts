@@ -8,7 +8,9 @@ import { spawn } from 'node:child_process';
 type Message = { id?: number; method?: string; params?: unknown; result?: unknown };
 
 function client() {
-    const child = spawn(process.env.MDRS_LS_NODE ? 'node' : 'bun', [process.env.MDRS_LS_NODE ? 'dist/cli.js' : 'src/cli.ts', '--stdio'], { cwd: `${import.meta.dir}/..` });
+    const child = spawn(process.env.MDRS_LS_NODE ? 'node' : 'bun', [process.env.MDRS_LS_NODE ? 'dist/cli.js' : 'src/cli.ts', '--stdio'], {
+        cwd: `${import.meta.dir}/..`
+    });
     let buffer = Buffer.alloc(0);
     const messages: Message[] = [];
     const waiters: { match: (message: Message) => boolean; resolve: (message: Message) => void }[] = [];

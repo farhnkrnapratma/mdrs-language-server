@@ -14,8 +14,8 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 import { type Analysis, analyze } from './analyzer.js';
 import { complete } from './completion.js';
 import { hover } from './hover.js';
-import { VERSION } from './version.js';
 import { definition, documentHighlights, documentSymbols, foldingRanges, references } from './structure.js';
+import { VERSION } from './version.js';
 
 export const SERVER_NAME = 'mdrs-language-server';
 
@@ -90,9 +90,7 @@ export function startServer(connection: Connection = createConnection(ProposedFe
         )
     );
     connection.onDocumentHighlight(params =>
-        withDocument(params.textDocument.uri, [], analysis =>
-            documentHighlights(analysis, params.position).map(range => ({ range }))
-        )
+        withDocument(params.textDocument.uri, [], analysis => documentHighlights(analysis, params.position).map(range => ({ range })))
     );
 
     documents.listen(connection);

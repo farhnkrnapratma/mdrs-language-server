@@ -7,11 +7,8 @@ import type { Analysis, AttributeNode, DefineEntry, DirectiveNode, VariableRef }
 
 export function contains(range: Range, position: Position): boolean {
     const afterStart =
-        position.line > range.start.line ||
-        (position.line === range.start.line && position.character >= range.start.character);
-    const beforeEnd =
-        position.line < range.end.line ||
-        (position.line === range.end.line && position.character <= range.end.character);
+        position.line > range.start.line || (position.line === range.start.line && position.character >= range.start.character);
+    const beforeEnd = position.line < range.end.line || (position.line === range.end.line && position.character <= range.end.character);
     return afterStart && beforeEnd;
 }
 
@@ -38,10 +35,7 @@ export function directiveOnLine(analysis: Analysis, line: number): DirectiveNode
     return allDirectives(analysis).find(node => node.line === line);
 }
 
-export function attributeAt(
-    analysis: Analysis,
-    position: Position
-): { node: DirectiveNode; attribute: AttributeNode } | undefined {
+export function attributeAt(analysis: Analysis, position: Position): { node: DirectiveNode; attribute: AttributeNode } | undefined {
     const node = directiveOnLine(analysis, position.line);
     const attribute = node?.attributes.find(item => contains(item.nameRange, position));
     return node && attribute ? { node, attribute } : undefined;

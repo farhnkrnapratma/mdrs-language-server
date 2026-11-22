@@ -124,17 +124,10 @@ export function definition(analysis: Analysis, uri: string, position: Position):
     return entry ? { uri, range: entry.keyRange } : null;
 }
 
-export function references(
-    analysis: Analysis,
-    uri: string,
-    position: Position,
-    includeDeclaration: boolean
-): Location[] {
+export function references(analysis: Analysis, uri: string, position: Position, includeDeclaration: boolean): Location[] {
     const name = variableAt(analysis, position);
     if (!name) return [];
-    const locations = analysis.variableRefs
-        .filter(ref => ref.name === name)
-        .map(ref => ({ uri, range: ref.range }));
+    const locations = analysis.variableRefs.filter(ref => ref.name === name).map(ref => ({ uri, range: ref.range }));
     const entry = defineEntry(analysis, name);
     if (includeDeclaration && entry) locations.unshift({ uri, range: entry.keyRange });
     return locations;

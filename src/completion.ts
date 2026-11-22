@@ -2,18 +2,12 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-import {
-    type CompletionItem,
-    CompletionItemKind,
-    InsertTextFormat,
-    MarkupKind,
-    type Position
-} from 'vscode-languageserver';
+import { type CompletionItem, CompletionItemKind, InsertTextFormat, MarkupKind, type Position } from 'vscode-languageserver';
 import type { Analysis } from './analyzer.js';
 import { DIRECTIVES, type DirectiveSpec, directiveSpec, KEYWORD_DOCS } from './directives.js';
 import { enclosingDirective, isInsideDefine, isInsideFence } from './navigation.js';
 
-const PREFIX = String.raw`^( {0,3}(?:> ?)*)`;
+const PREFIX = '^( {0,3}(?:> ?)*)';
 const DIRECTIVE_NAME_RE = new RegExp(`${PREFIX}(:{3,})([A-Za-z-]*)$`);
 const TAB_NAME_RE = new RegExp(`${PREFIX}::([A-Za-z-]*)$`);
 const OPEN_LINE_RE = new RegExp(`${PREFIX}(:{2,})([A-Za-z][A-Za-z-]*)((?:\\s+[A-Za-z][\\w-]*="(?:[^"\\\\]|\\\\.)*")*)\\s+([A-Za-z-]*)$`);
@@ -148,7 +142,13 @@ function expressionItems(
         for (const entry of entries) {
             items.push({ ...variable(`this.${entry.name}`, entry.valueText), filterText: `this.${entry.name}` });
         }
-        items.push({ label: 'this', kind: CompletionItemKind.Keyword, documentation: KEYWORD_DOCS.this, textEdit: { range: replace, newText: 'this.' }, sortText: '1this' });
+        items.push({
+            label: 'this',
+            kind: CompletionItemKind.Keyword,
+            documentation: KEYWORD_DOCS.this,
+            textEdit: { range: replace, newText: 'this.' },
+            sortText: '1this'
+        });
     } else if (mode === 'body' || analysis.define) {
         for (const entry of entries) items.push(variable(entry.name, entry.valueText));
     }
@@ -174,7 +174,12 @@ function expressionItems(
         sortText: '3get'
     });
     for (const literal of ['true', 'false', 'null']) {
-        items.push({ label: literal, kind: CompletionItemKind.Constant, textEdit: { range: replace, newText: literal }, sortText: `4${literal}` });
+        items.push({
+            label: literal,
+            kind: CompletionItemKind.Constant,
+            textEdit: { range: replace, newText: literal },
+            sortText: `4${literal}`
+        });
     }
     return items;
 }
@@ -203,7 +208,10 @@ export function complete(analysis: Analysis, position: Position): CompletionItem
                 kind: CompletionItemKind.Module,
                 documentation: documentation(spec),
                 insertTextFormat: InsertTextFormat.Snippet,
-                textEdit: { range: { start: { line: position.line, character: tab[1].length }, end: position }, newText: `::${spec.snippet}` }
+                textEdit: {
+                    range: { start: { line: position.line, character: tab[1].length }, end: position },
+                    newText: `::${spec.snippet}`
+                }
             }
         ];
     }

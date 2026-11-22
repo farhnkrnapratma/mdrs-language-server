@@ -106,11 +106,7 @@ function skipQuoted(source: string, start: number): number {
     return j;
 }
 
-export function findExpressionEnd(
-    source: string,
-    openBrace: number,
-    limit = source.length
-): number {
+export function findExpressionEnd(source: string, openBrace: number, limit = source.length): number {
     let depth = 0;
     let j = openBrace;
     const end = Math.min(source.length, limit);
@@ -142,8 +138,7 @@ function readSingleQuoted(source: string, start: number): { value: string; end: 
             j++;
         }
     }
-    if (j >= source.length)
-        throw new DefineError(`Unterminated string literal at position ${start}`);
+    if (j >= source.length) throw new DefineError(`Unterminated string literal at position ${start}`);
     return { value, end: j + 1 };
 }
 
@@ -164,10 +159,7 @@ function readExpansion(source: string, at: number): Expansion {
     return { part: { kind: 'variable', name: source.slice(at + 1, end) }, end };
 }
 
-function readDoubleQuoted(
-    source: string,
-    start: number
-): { parts: RawTemplatePart[]; end: number } {
+function readDoubleQuoted(source: string, start: number): { parts: RawTemplatePart[]; end: number } {
     const parts: RawTemplatePart[] = [];
     let text = '';
     let j = start + 1;
@@ -187,8 +179,7 @@ function readDoubleQuoted(
         parts.push(expansion.part);
         j = expansion.end;
     }
-    if (j >= source.length)
-        throw new DefineError(`Unterminated string literal at position ${start}`);
+    if (j >= source.length) throw new DefineError(`Unterminated string literal at position ${start}`);
     if (text) parts.push({ kind: 'text', value: text });
     return { parts, end: j + 1 };
 }

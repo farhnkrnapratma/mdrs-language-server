@@ -73,12 +73,10 @@ describe('structure', () => {
 
     test('checks required, unknown, duplicate and unquoted attributes', () => {
         expect(messages(':::callout\nx\n:::')).toEqual(['1::::callout requires title="..."']);
-        expect(messages(':::details summary="a" open="yes"\nx\n:::')).toEqual([
-            "1::::details has no 'open' attribute; it is ignored."
-        ]);
+        expect(messages(':::details summary="a" open="yes"\nx\n:::')).toEqual(["1::::details has no 'open' attribute; it is ignored."]);
         expect(messages(':::callout title="a" title="b"\nx\n:::')).toEqual(["1:'title' is set more than once."]);
         expect(messages(":::callout title='a'\nx\n:::")).toContain(
-            '1:\'title=\'a\'\' is not a key="value" attribute and is ignored. Values need double quotes.'
+            "1:'title='a'' is not a key=\"value\" attribute and is ignored. Values need double quotes."
         );
     });
 
@@ -92,9 +90,7 @@ describe('structure', () => {
     test('checks embeds and references', () => {
         expect(messages(':::embed')).toEqual(['1::::embed requires url="..."']);
         expect(messages(':::embed url="ftp://x"')[0]).toContain('must start with http');
-        expect(messages(':::references\n\n:::\n:::references\n\n:::')).toContain(
-            '4:Use at most one :::references block per document.'
-        );
+        expect(messages(':::references\n\n:::\n:::references\n\n:::')).toContain('4:Use at most one :::references block per document.');
     });
 
     test('limits directive nesting', () => {
@@ -122,9 +118,7 @@ describe(':::define', () => {
     });
 
     test('reports forward references and syntax errors', () => {
-        expect(messages(':::define\na: this.b\nb: 1\n:::')).toContain(
-            "2:'b' is undefined, or referenced before it was defined"
-        );
+        expect(messages(':::define\na: this.b\nb: 1\n:::')).toContain("2:'b' is undefined, or referenced before it was defined");
         expect(messages(':::define\na: "open\n:::').some(message => message.includes('Unterminated'))).toBe(true);
     });
 
