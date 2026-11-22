@@ -10,7 +10,7 @@ import {
     type Position,
     type Range,
     SymbolKind
-} from 'vscode-languageserver';
+} from 'vscode-languageserver-types';
 import type { Analysis, DirectiveNode } from './analyzer.js';
 import { contains, defineEntry, variableAt } from './navigation.js';
 

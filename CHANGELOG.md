@@ -2,6 +2,11 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## 0.2.0
+
+- The package root runs in the browser: the analysis imports only `vscode-languageserver-types`.
+- `startServer` and `SERVER_NAME` move to `@mdrs/language-server/server`.
+
 ## 0.1.0
 
 - First release.

@@ -96,13 +96,21 @@ new LanguageClient(
 
 ## Library use
 
-The analysis is also available without a running server:
+The analysis runs without a server, in Node.js or in the browser, so an editor can show the same diagnostics, completion and hover in place:
 
 ```ts
 import { analyze, complete, hover, documentSymbols } from '@mdrs/language-server';
 
 const analysis = analyze(':::callout\nBody\n:::');
 console.log(analysis.diagnostics[0].message); // :::callout requires title="..."
+```
+
+The server itself is a separate entry point that needs Node.js:
+
+```ts
+import { startServer } from '@mdrs/language-server/server';
+
+startServer();
 ```
 
 ## Development

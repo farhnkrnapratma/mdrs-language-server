@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-import { type CompletionItem, CompletionItemKind, InsertTextFormat, MarkupKind, type Position } from 'vscode-languageserver';
+import { type CompletionItem, CompletionItemKind, InsertTextFormat, MarkupKind, type Position } from 'vscode-languageserver-types';
 import type { Analysis } from './analyzer.js';
 import { DIRECTIVES, type DirectiveSpec, directiveSpec, KEYWORD_DOCS } from './directives.js';
 import { enclosingDirective, isInsideDefine, isInsideFence } from './navigation.js';

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-import type { Position, Range } from 'vscode-languageserver';
+import type { Position, Range } from 'vscode-languageserver-types';
 import type { Analysis, AttributeNode, DefineEntry, DirectiveNode, VariableRef } from './analyzer.js';
 
 export function contains(range: Range, position: Position): boolean {

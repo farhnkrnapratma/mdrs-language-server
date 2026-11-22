@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 import { describe, expect, test } from 'bun:test';
-import type { MarkupContent } from 'vscode-languageserver';
+import type { MarkupContent } from 'vscode-languageserver-types';
 import { analyze } from '../src/analyzer.js';
 import { complete } from '../src/completion.js';
 import { hover } from '../src/hover.js';

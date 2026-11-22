@@ -11,7 +11,7 @@ import {
     StreamMessageReader,
     StreamMessageWriter
 } from 'vscode-languageserver/node';
-import { startServer } from '../src/index.js';
+import { startServer } from '../src/server.js';
 
 const toServer = new PassThrough();
 const toClient = new PassThrough();

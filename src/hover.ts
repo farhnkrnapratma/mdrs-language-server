@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-import { type Hover, MarkupKind, type Position } from 'vscode-languageserver';
+import { type Hover, MarkupKind, type Position } from 'vscode-languageserver-types';
 import type { Analysis } from './analyzer.js';
 import { type DirectiveSpec, directiveSpec, KEYWORD_DOCS } from './directives.js';
 import { attributeAt, contains, defineEntry, directiveOnLine, variableAt, wordAt } from './navigation.js';

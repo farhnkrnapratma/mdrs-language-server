@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 import { load as loadYaml, YAMLException } from 'js-yaml';
-import { type Diagnostic, DiagnosticSeverity, type Range } from 'vscode-languageserver';
+import { type Diagnostic, DiagnosticSeverity, type Range } from 'vscode-languageserver-types';
 import { type DirectiveSpec, directiveSpec } from './directives.js';
 import type { Expr } from './expr/ast.js';
 import { DefineError } from './expr/errors.js';

@@ -6,6 +6,5 @@ export { type Analysis, analyze, type DefineEntry, type DirectiveNode, getPathPr
 export { complete } from './completion.js';
 export { DIRECTIVES, type DirectiveSpec, directiveSpec } from './directives.js';
 export { hover } from './hover.js';
-export { SERVER_NAME, startServer } from './server.js';
 export { definition, documentHighlights, documentSymbols, foldingRanges, references } from './structure.js';
 export { VERSION } from './version.js';
