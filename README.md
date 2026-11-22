@@ -1,6 +1,6 @@
 # MDRS Language Server
 
-[![npm](https://img.shields.io/npm/v/@mdrs/language-server?label=npm)](https://www.npmjs.com/package/@mdrs/language-server) ![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/farhnkrnapratma/mdrs-language-server/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/farhnkrnapratma/mdrs-language-server/tree/main) [![Coverage](https://codecov.io/gh/farhnkrnapratma/mdrs-language-server/graph/badge.svg)](https://codecov.io/gh/farhnkrnapratma/mdrs-language-server) [![npm](https://img.shields.io/npm/v/%40mdrs%2Flanguage-server?label=npm)](https://www.npmjs.com/package/@mdrs/language-server) [![npm downloads](https://img.shields.io/npm/dm/%40mdrs%2Flanguage-server)](https://www.npmjs.com/package/@mdrs/language-server) ![Node.js](https://img.shields.io/node/v/%40mdrs%2Flanguage-server) ![Types](https://img.shields.io/npm/types/%40mdrs%2Flanguage-server) [![Biome](https://img.shields.io/badge/code_style-Biome-60a5fa?logo=biome)](https://biomejs.dev) [![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-fe5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org) [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)](https://semver.org) ![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)
 
 A [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) server for **MDRS (Markdown Rich Syntax)**, the Markdown dialect with directives, document variables, conditionals and live data. It works in any editor with an LSP client.
 
@@ -110,7 +110,9 @@ console.log(analysis.diagnostics[0].message); // :::callout requires title="..."
 ```sh
 bun install
 bun test           # unit tests and an end-to-end stdio test
-bun run typecheck
+bun run coverage   # the same with a 100% line and function coverage gate
+bun run check      # Biome (format and lint), then the type check
+bun run format     # format with Biome
 bun run build      # compiles to dist/
 ```
 
