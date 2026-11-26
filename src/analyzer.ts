@@ -80,12 +80,28 @@ const OPEN_RE = new RegExp(`${PREFIX}(:{3,})([A-Za-z][A-Za-z-]*)(.*)$`);
 const TAB_RE = new RegExp(`${PREFIX}::([A-Za-z][A-Za-z-]*)(.*)$`);
 const CLOSE_RE = new RegExp(`${PREFIX}(:{2,})[ \\t]*$`);
 const FENCE_RE = /^( {0,3})(`{3,}|~{3,})(.*)$/;
-const HEADING_RE = /^ {0,3}(#{1,6})[ \t]+(.*?)(?:[ \t]+#+)?[ \t]*$/;
+const HEADING_RE = /^ {0,3}(#{1,6})[ \t]+/;
 const ATTR_RE = /([A-Za-z][\w-]*)="((?:[^"\\]|\\.)*)"/g;
 const INLINE_KEYWORD_RE = /^(\s*)(if|elif|else|endif)\b(.*)$/s;
 
 function range(line: number, start: number, end: number): Range {
     return { start: { line, character: start }, end: { line, character: end } };
+}
+
+function isBlank(char: string | undefined): boolean {
+    return char === ' ' || char === '\t';
+}
+
+function headingText(rest: string): string {
+    let end = rest.length;
+    while (end > 0 && isBlank(rest[end - 1])) end--;
+    let hashes = end;
+    while (hashes > 0 && rest[hashes - 1] === '#') hashes--;
+    if (hashes < end && (hashes === 0 || isBlank(rest[hashes - 1]))) {
+        end = hashes;
+        while (end > 0 && isBlank(rest[end - 1])) end--;
+    }
+    return rest.slice(0, end);
 }
 
 function maskCodeSpans(text: string): string {
@@ -334,7 +350,7 @@ export function analyze(text: string): Analysis {
         if (heading) {
             result.headings.push({
                 level: heading[1].length,
-                text: heading[2],
+                text: headingText(source.slice(heading[0].length)),
                 line,
                 range: range(line, 0, source.length)
             });

@@ -55,3 +55,19 @@ describe('hover', () => {
 test('lists a directive before the first heading at the top level', () => {
     expect(documentSymbols(analyze(':::callout title="x"\n:::\n# H')).map(symbol => symbol.name)).toEqual([':::callout x', 'H']);
 });
+
+test('reads heading text without the closing sequence', () => {
+    const texts = (source: string) => analyze(source).headings.map(heading => heading.text);
+    expect(texts('# Title #')).toEqual(['Title']);
+    expect(texts('## Title ##   ')).toEqual(['Title']);
+    expect(texts('# C#')).toEqual(['C#']);
+    expect(texts('### ###')).toEqual(['']);
+    expect(texts('#\tTab')).toEqual(['Tab']);
+    expect(texts('#NoSpace')).toEqual([]);
+});
+
+test('analyzes a heading with a long run of spaces in linear time', () => {
+    const start = performance.now();
+    analyze(`# a${' '.repeat(100_000)}x`);
+    expect(performance.now() - start).toBeLessThan(500);
+});
