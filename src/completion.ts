@@ -20,7 +20,7 @@ function documentation(spec: DirectiveSpec) {
     return { kind: MarkupKind.Markdown, value: `${spec.summary}${attributes}\n\n[Documentation](${spec.docs})` };
 }
 
-function directiveItems(analysis: Analysis, position: Position, typed: string, start: number): CompletionItem[] {
+function directiveItems(analysis: Analysis, position: Position, typed: string, start: number, colons: string): CompletionItem[] {
     const firstContent = firstContentLine(analysis);
     const parent = enclosingDirective(analysis, position.line);
     return DIRECTIVES.filter(spec => {
@@ -37,7 +37,7 @@ function directiveItems(analysis: Analysis, position: Position, typed: string, s
         insertTextFormat: InsertTextFormat.Snippet,
         textEdit: {
             range: { start: { line: position.line, character: start }, end: position },
-            newText: spec.snippet
+            newText: `${colons}${spec.snippet.replace(/:::$/, colons)}`
         },
         sortText: `${spec.kind === 'conditional' ? '1' : '0'}${spec.name}`,
         preselect: typed !== '' && spec.name.startsWith(typed.toLowerCase())
@@ -197,7 +197,7 @@ export function complete(analysis: Analysis, position: Position): CompletionItem
     }
 
     const directive = DIRECTIVE_NAME_RE.exec(before);
-    if (directive) return directiveItems(analysis, position, directive[3], directive[1].length);
+    if (directive) return directiveItems(analysis, position, directive[3], directive[1].length, directive[2]);
 
     const tab = TAB_NAME_RE.exec(before);
     if (tab && enclosingDirective(analysis, position.line)?.spec?.kind === 'tabGroup') {

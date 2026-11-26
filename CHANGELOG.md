@@ -2,6 +2,10 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## 0.3.1
+
+- Fix: completing a directive name keeps the colons you typed. Choosing `:::note` after `:::no` used to replace the line with `note`, and a directive opened with four or more colons now closes with the same number.
+
 ## 0.3.0
 
 - `@mdrs/language-server/highlight` exports `mdrsLanguage`, the highlight.js grammar for MDRS. `highlight.js` is an optional peer dependency, so only users of this entry need it.

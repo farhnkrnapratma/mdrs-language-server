@@ -60,7 +60,12 @@ describe('completion', () => {
         const item = at('x\n:::cal', 1, 7).find(entry => entry.label === ':::callout');
         expect(item?.textEdit).toMatchObject({
             range: { start: { line: 1, character: 0 }, end: { line: 1, character: 7 } },
-            newText: 'callout title="${1:Title}"\n$0\n:::'
+            newText: ':::callout title="${1:Title}"\n$0\n:::'
+        });
+        const nested = at('> ::::no', 0, 8).find(entry => entry.label === ':::note');
+        expect(nested?.textEdit).toMatchObject({
+            range: { start: { line: 0, character: 2 }, end: { line: 0, character: 8 } },
+            newText: '::::note\n$0\n::::'
         });
     });
 

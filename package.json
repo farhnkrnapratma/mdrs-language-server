@@ -1,6 +1,6 @@
 {
     "name": "@mdrs/language-server",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Language server for MDRS (Markdown Rich Syntax): diagnostics, completion, hover, symbols and folding.",
     "license": "MIT OR Apache-2.0",
     "author": "Farhan Kurnia Pratama",
