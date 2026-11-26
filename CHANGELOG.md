@@ -2,6 +2,11 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## 0.3.0
+
+- `@mdrs/language-server/highlight` exports `mdrsLanguage`, the highlight.js grammar for MDRS. `highlight.js` is an optional peer dependency, so only users of this entry need it.
+- Fix: a heading followed by a long run of spaces no longer makes the analysis take quadratic time (80,000 characters took 11.7 s).
+
 ## 0.2.0
 
 - The package root runs in the browser: the analysis imports only `vscode-languageserver-types`.

@@ -113,6 +113,18 @@ import { startServer } from '@mdrs/language-server/server';
 startServer();
 ```
 
+### Syntax highlighting
+
+`@mdrs/language-server/highlight` exports the MDRS grammar for [highlight.js](https://highlightjs.org). It builds on the Markdown grammar and adds directives, attributes, `:::define` entries, expressions and `${…}` interpolation. Install `highlight.js` 11 alongside it:
+
+```ts
+import hljs from 'highlight.js';
+import { mdrsLanguage } from '@mdrs/language-server/highlight';
+
+hljs.registerLanguage('mdrs', mdrsLanguage);
+hljs.highlight(':::callout title="Note"\nHi ${name}\n:::', { language: 'mdrs' });
+```
+
 ## Development
 
 ```sh
